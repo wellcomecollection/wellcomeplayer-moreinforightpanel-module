@@ -52,9 +52,6 @@ export class ConditionsDialogue extends dialogue.Dialogue {
         // ensure anchor tags link to _blank.
         this.$message.find('a').prop('target', '_blank');
 
-        // ensure anchor tags link to _blank.
-        this.$message.find('a').prop('target', '_blank');
-
         this.$element.hide();
     }
 
