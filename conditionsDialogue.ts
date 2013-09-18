@@ -44,60 +44,8 @@ export class ConditionsDialogue extends dialogue.Dialogue {
         this.$title.text(this.content.title);
         
         var licenseCode = this.provider.getRootSection().extensions.mods.dzLicenseCode;
-        if (licenseCode == null) licenseCode = "";
 
-        var licenseText;
-
-        switch (licenseCode.toLowerCase()) {
-            case "a":
-                licenseText = this.content.A;
-                break;
-            case "b":
-                licenseText = this.content.B;
-                break;
-            case "c":
-                licenseText = this.content.C;
-                break;
-            case "d":
-                licenseText = this.content.D;
-                break;
-            case "e":
-                licenseText = this.content.E;
-                break;
-            case "f":
-                licenseText = this.content.F;
-                break;
-            case "g":
-                licenseText = this.content.G;
-                break;
-            case "j":
-                licenseText = this.content.J;
-                break;
-            case "k":
-                licenseText = this.content.K;
-                break;
-            case "l":
-                licenseText = this.content.L;
-                break;
-            case "m":
-                licenseText = this.content.M;
-                break;
-            case "n":
-                licenseText = this.content.N;
-                break;
-            case "o":
-                licenseText = this.content.O;
-                break;
-            case "p":
-                licenseText = this.content.P;
-                break;
-            case "q":
-                licenseText = this.content.Q;
-                break;
-            default:
-                licenseText = this.content.A;
-                break;
-        }
+        var licenseText = this.content[licenseCode] || this.content["A"];
 
         this.$message.html(licenseText);
 
