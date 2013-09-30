@@ -3,7 +3,7 @@
 import baseApp = require("../coreplayer-shared-module/baseApp");
 import baseRight = require("../coreplayer-shared-module/rightPanel");
 import utils = require("../../utils");
-import conditions = require("./conditionsDialogue");
+import conditions = require("../wellcomeplayer-dialogues-module/conditionsDialogue");
 
 export class MoreInfoRightPanel extends baseRight.RightPanel {
 
