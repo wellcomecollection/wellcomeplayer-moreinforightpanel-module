@@ -1,9 +1,10 @@
 /// <reference path="../../js/jquery.d.ts" />
 
-import baseApp = require("../coreplayer-shared-module/baseApp");
+import baseExtension = require("../coreplayer-shared-module/baseExtension");
 import baseRight = require("../coreplayer-shared-module/rightPanel");
 import utils = require("../../utils");
 import conditions = require("../wellcomeplayer-dialogues-module/conditionsDialogue");
+import IWellcomeProvider = require("../wellcomeplayer-shared-module/iWellcomeProvider");
 
 export class MoreInfoRightPanel extends baseRight.RightPanel {
 
@@ -40,7 +41,7 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
         // show loading icon.
         this.$main.addClass('loading');
 
-        var uri = this.provider.getMoreInfoUri();
+        var uri = (<IWellcomeProvider>this.provider).getMoreInfoUri();
 
         var that = this;
 
