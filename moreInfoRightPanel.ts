@@ -9,7 +9,6 @@ import IWellcomeProvider = require("../wellcomeplayer-shared-module/iWellcomePro
 export class MoreInfoRightPanel extends baseRight.RightPanel {
 
     moreInfoItemTemplate: JQuery;
-    data: any;
     $conditionsLink: JQuery;
 
     constructor($element: JQuery) {
@@ -32,66 +31,76 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
         super.toggleComplete();
 
         if (this.isUnopened) {
-            this.displayInfo();
+            this.getInfo();
         }
     }
 
-    displayInfo(): void {
+    getInfo(): void {
 
         // show loading icon.
         this.$main.addClass('loading');
 
-        var uri = (<IWellcomeProvider>this.provider).getMoreInfoUri();
+        // if data already loaded.
+        if ((<IWellcomeProvider>this.provider).moreInfo){
+            this.displayInfo();
+        } else {
+            // otherwise, load data.
+            var uri = (<IWellcomeProvider>this.provider).getMoreInfoUri();
 
-        var that = this;
+            $.getJSON(uri, (data: any) => {
+                (<IWellcomeProvider>this.provider).moreInfo = data;
 
-        $.getJSON(uri, function (data) {
-            that.data = data;
+                this.displayInfo();
+            });
+        }
+    }
 
-            that.$main.removeClass('loading');
+    displayInfo(): void {
+        this.$main.removeClass('loading');
 
-            that.$main.empty();
+        this.$main.empty();
 
-            //data.Summary = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec hendrerit rutrum tortor at semper. Proin vel nulla eget risus gravida consectetur at at quam. Ut ac quam purus, eget sodales enim. Nam faucibus adipiscing massa, quis vehicula lacus eleifend non. Curabitur semper hendrerit rutrum. In semper augue a sapien iaculis ac suscipit lorem semper. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nunc venenatis cursus massa, vel condimentum augue blandit sit amet. Ut vel magna eu dui vulputate facilisis. Aenean urna neque, consequat quis cursus sit amet, lobortis in tellus.";
+        //data.Summary = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec hendrerit rutrum tortor at semper. Proin vel nulla eget risus gravida consectetur at at quam. Ut ac quam purus, eget sodales enim. Nam faucibus adipiscing massa, quis vehicula lacus eleifend non. Curabitur semper hendrerit rutrum. In semper augue a sapien iaculis ac suscipit lorem semper. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nunc venenatis cursus massa, vel condimentum augue blandit sit amet. Ut vel magna eu dui vulputate facilisis. Aenean urna neque, consequat quis cursus sit amet, lobortis in tellus.";
 
-            $.each(data, function (name, value) {
-                if (value && !value.startsWith('http:')) {
-                    switch (name.toLowerCase()) {
-                        case "bibdoctype":
-                            break;
-                        case "repositorylogo":
-                            break;
-                        default:
-                            that.$main.append(that.buildItem(name, value, 130));
-                            break;
-                    }
+        var data = (<IWellcomeProvider>this.provider).moreInfo;
+
+        $.each(data, (name: string, value: string) => {
+            if (value && !value.startsWith('http:')) {
+                switch (name.toLowerCase()) {
+                    case "bibdoctype":
+                        break;
+                    case "repositorylogo":
+                        break;
+                    default:
+                        this.$main.append(this.buildItem(name, value, 130));
+                        break;
                 }
-            });
-
-            // logo
-            var logoUri = data["RepositoryLogo"];
-
-            if (logoUri) {
-                that.$main.append('<img src="' + logoUri + '" />');
             }
+        });
 
-            // full catalogue record.
-            var catalogueRecordKey = "View full catalogue record";
-            var url = data[catalogueRecordKey];
+        // logo
+        var logoUri = data["RepositoryLogo"];
 
-            if (url) {
-                var $catalogueLink = $('<a href="' + url + '" target="_blank" class="action catalogue">' + catalogueRecordKey + '</a>');
-                that.$main.append($catalogueLink);
-            }
+        if (logoUri) {
+            this.$main.append('<img src="' + logoUri + '" />');
+        }
 
-            // conditions.
-            var $conditionsLink = $('<a href="#" class="action conditions">' + that.content.conditions + '</a>');
-            that.$main.append($conditionsLink);
+        // full catalogue record.
+        var catalogueRecordKey = "View full catalogue record";
+        var url = data[catalogueRecordKey];
 
-            $conditionsLink.on('click', (e) => {
-                e.preventDefault();
-                $.publish(conditions.ConditionsDialogue.SHOW_CONDITIONS_DIALOGUE);
-            });
+        if (url) {
+            var $catalogueLink = $('<a href="' + url + '" target="_blank" class="action catalogue">' + catalogueRecordKey + '</a>');
+            this.$main.append($catalogueLink);
+        }
+
+        // conditions.
+        var $conditionsLink = $('<a href="#" class="action conditions">' + this.content.conditions + '</a>');
+        this.$main.append($conditionsLink);
+
+        $conditionsLink.on('click', (e) => {
+            e.preventDefault();
+            $.publish(conditions.ConditionsDialogue.SHOW_CONDITIONS_DIALOGUE);
         });
     }
 
