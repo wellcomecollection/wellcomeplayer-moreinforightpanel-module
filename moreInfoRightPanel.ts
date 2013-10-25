@@ -69,6 +69,10 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
                 switch (name.toLowerCase()) {
                     case "bibdoctype":
                         break;
+                    case "marc759a":
+                        break;
+                    case "institution":
+                        break;
                     case "repositorylogo":
                         break;
                     default:
