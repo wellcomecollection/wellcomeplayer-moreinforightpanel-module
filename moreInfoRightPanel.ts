@@ -16,9 +16,9 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
     }
 
     create(): void {
-        
+
         this.setConfig('moreInfoRightPanel');
-        
+
         super.create();
 
         this.moreInfoItemTemplate = $('<div class="item">\
@@ -71,6 +71,8 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
                         break;
                     case "marc759a":
                         break;
+                    case "marc905a":
+                        break;
                     case "institution":
                         break;
                     case "repositorylogo":
@@ -112,6 +114,9 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
         var $elem = this.moreInfoItemTemplate.clone();
         var $header = $elem.find('.header');
         var $text = $elem.find('.text');
+
+        // replace \n with <br>
+        value = value.replace('\n', '<br>');
 
         $header.text(name);
         $text.text(value);
