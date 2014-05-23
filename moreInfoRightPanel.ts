@@ -64,10 +64,9 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
 
         var data = (<IWellcomeProvider>this.provider).moreInfo;
 
-        _.each(data, (item: any) => {
-            var value = item[1];
+        $.each(data, (key: string, value: string) => {
             if (value && !value.startsWith('http:')) {
-                switch (name.toLowerCase()) {
+                switch (key.toLowerCase()) {
                     case "bibdoctype":
                         break;
                     case "marc759a":
@@ -79,7 +78,12 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
                     case "repositorylogo":
                         break;
                     default:
-                        this.$main.append(this.buildItem(item, 130));
+                        this.$main.append(this.buildItem(
+                            {
+                                "label": key,
+                                "value": value
+                            },
+                            130));
                         break;
                 }
             }
