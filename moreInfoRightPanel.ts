@@ -64,7 +64,8 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
 
         var data = (<IWellcomeProvider>this.provider).moreInfo;
 
-        $.each(data, (name: string, value: string) => {
+        _.each(data, (item: any) => {
+            var value = item[1];
             if (value && !value.startsWith('http:')) {
                 switch (name.toLowerCase()) {
                     case "bibdoctype":
@@ -78,7 +79,7 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
                     case "repositorylogo":
                         break;
                     default:
-                        this.$main.append(this.buildItem(name, value, 130));
+                        this.$main.append(this.buildItem(item, 130));
                         break;
                 }
             }
@@ -110,10 +111,15 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
         });
     }
 
-    buildItem(name, value, trimChars): any {
+    buildItem(item: any, trimChars: number): any {
         var $elem = this.moreInfoItemTemplate.clone();
         var $header = $elem.find('.header');
         var $text = $elem.find('.text');
+
+        item = _.values(item);
+
+        var name = item[0];
+        var value = item[1];
 
         // replace \n with <br>
         value = value.replace('\n', '<br>');
