@@ -9,6 +9,7 @@ import IWellcomeProvider = require("../wellcomeplayer-shared-module/iWellcomePro
 export class MoreInfoRightPanel extends baseRight.RightPanel {
 
     moreInfoItemTemplate: JQuery;
+    $items: JQuery;
     $conditionsLink: JQuery;
 
     constructor($element: JQuery) {
@@ -25,6 +26,9 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
                                            <div class="header"></div>\
                                            <div class="text"></div>\
                                        </div>');
+
+        this.$items = $('<div class="items"></div>');
+        this.$main.append(this.$items);
     }
 
     toggleComplete(): void {
@@ -58,7 +62,7 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
     displayInfo(): void {
         this.$main.removeClass('loading');
 
-        this.$main.empty();
+        this.$items.empty();
 
         //data.Summary = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec hendrerit rutrum tortor at semper. Proin vel nulla eget risus gravida consectetur at at quam. Ut ac quam purus, eget sodales enim. Nam faucibus adipiscing massa, quis vehicula lacus eleifend non. Curabitur semper hendrerit rutrum. In semper augue a sapien iaculis ac suscipit lorem semper. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nunc venenatis cursus massa, vel condimentum augue blandit sit amet. Ut vel magna eu dui vulputate facilisis. Aenean urna neque, consequat quis cursus sit amet, lobortis in tellus.";
 
@@ -78,7 +82,7 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
                     case "repositorylogo":
                         break;
                     default:
-                        this.$main.append(this.buildItem(
+                        this.$items.append(this.buildItem(
                             {
                                 "label": key,
                                 "value": value
@@ -93,7 +97,7 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
         var logoUri = data["RepositoryLogo"];
 
         if (logoUri) {
-            this.$main.append('<img src="' + logoUri + '" />');
+            this.$items.append('<img src="' + logoUri + '" />');
         }
 
         // full catalogue record.
@@ -102,12 +106,12 @@ export class MoreInfoRightPanel extends baseRight.RightPanel {
 
         if (url) {
             var $catalogueLink = $('<a href="' + url + '" target="_blank" class="action catalogue">' + catalogueRecordKey + '</a>');
-            this.$main.append($catalogueLink);
+            this.$items.append($catalogueLink);
         }
 
         // conditions.
         var $conditionsLink = $('<a href="#" class="action conditions">' + this.content.conditions + '</a>');
-        this.$main.append($conditionsLink);
+        this.$items.append($conditionsLink);
 
         $conditionsLink.on('click', (e) => {
             e.preventDefault();
